@@ -56,11 +56,12 @@
             android:padding="16dp" />
 
         <Button
-            android:id="@+id/btnRegistro"
+            android:id="@+id/btnGuardar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="#ff3eaff9"
+            android:onClick="guardar"
             android:text="Guardar"
             android:textColor="#ffffff"
             android:textSize="18sp" />

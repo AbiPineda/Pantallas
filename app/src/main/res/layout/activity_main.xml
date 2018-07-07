@@ -46,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="#ff3eaff9"
+            android:onClick="entrar"
             android:text="Entrar"
             android:textColor="#ffffff"
             android:textSize="18sp" />
