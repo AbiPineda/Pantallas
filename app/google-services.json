@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1031884434024",
+    "firebase_url": "https://ferreteriafinal-b87ce.firebaseio.com",
+    "project_id": "ferreteriafinal-b87ce",
+    "storage_bucket": "ferreteriafinal-b87ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031884434024:android:19a8d1e1c3e21c00",
+        "android_client_info": {
+          "package_name": "com.example.abigail.pantallas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1031884434024-hbol4s1mh7a4pame8oo0ldafktv8ei87.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdgRz7haleDJTjAbVXUAhUxFVBJ1cGU90"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
