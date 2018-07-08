@@ -15,8 +15,8 @@ public class Categorias extends AppCompatActivity {
 
     GridView gridView;
 
-    String[] Names = {"Construcción","Pintura"};
-    int[] Images = {R.mipmap.pala, R.mipmap.pintura};
+    String[] Names = {"Construcción","Pintura", "Herramientas", "Hogar", "Maquinaria", "Varios"};
+    int[] Images = {R.mipmap.pala, R.mipmap.pintura, R.mipmap.her, R.mipmap.hog, R.mipmap.maquinaria, R.mipmap.var};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,12 +16,28 @@
                             <entry key="launcher">
                               <value>
                                 <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="foregroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="scalingPercent" value="82" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="C:\Users\abiga\Pictures\iconos\colores\pintura.png" />
-                                      <entry key="foregroundLayerName" value="pintura" />
-                                      <entry key="outputName" value="palas" />
+                                      <entry key="foregroundImage" value="C:\Users\abiga\Pictures\iconos\colores\varios.png" />
+                                      <entry key="foregroundLayerName" value="var" />
+                                      <entry key="outputName" value="varios" />
+                                      <entry key="previewDensity" value="HIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>
