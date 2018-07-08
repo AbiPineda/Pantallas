@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegistrarActivity" />
-        <activity android:name=".Categorias"></activity>
+        <activity android:name=".Categorias" />
+        <activity android:name=".GridItemActivity"></activity>
     </application>
 
 </manifest>
