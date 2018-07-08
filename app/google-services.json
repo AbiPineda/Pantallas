@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1031884434024-kgirikb78fqj7qosa18nobl5sqbacjmq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.abigail.pantallas",
+            "certificate_hash": "ae56fb383818242c1d597be46eaa437e1739351c"
+          }
+        },
+        {
           "client_id": "1031884434024-hbol4s1mh7a4pame8oo0ldafktv8ei87.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1031884434024-hbol4s1mh7a4pame8oo0ldafktv8ei87.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
