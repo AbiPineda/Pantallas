@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
+            showProgressDialog();
             Intent intent = new Intent(MainActivity.this, Categorias.class);
             startActivity(intent);
         } else {
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void entrar()
     {
-        
+
         //obtenemos el email y las contraseñas desde las cajas de texto
         final String email = etusuario.getText().toString().trim();
         String password = etcontraseña.getText().toString().trim();
