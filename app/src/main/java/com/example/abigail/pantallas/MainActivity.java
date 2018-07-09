@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             showProgressDialog();
             Intent intent = new Intent(MainActivity.this, Categorias.class);
             startActivity(intent);
-        } else {
-            // No user is signed in
         }
 
         txregistrarme.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                         if(task.isSuccessful()){
-                            Toast.makeText(MainActivity.this, "Bienvenido: "+etusuario, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Bienvenido: "+etusuario.getText(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplication(), Categorias.class);
                             intent.putExtra(Categorias.usuario, email);
                             startActivity(intent);
