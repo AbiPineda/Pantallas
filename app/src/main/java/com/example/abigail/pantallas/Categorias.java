@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Categorias extends AppCompatActivity {
-
+    public static final String usuario="nombre";
     GridView gridView;
 
     String[] Names = {"Construcción","Pintura", "Herramientas", "Hogar", "Maquinaria", "Varios"};

@@ -52,6 +52,16 @@
             android:textColor="#ffffff"
             android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/botonRegresar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#ff3eaff9"
+            android:text="@string/registrar"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
 </RelativeLayout>

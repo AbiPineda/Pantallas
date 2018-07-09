@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class GridItemActivity extends AppCompatActivity {
-
     TextView gridData;
     ImageView imageView;
 
