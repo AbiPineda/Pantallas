@@ -1,71 +1,85 @@
 package com.example.abigail.pantallas;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import java.io.BufferedReader;
+public class RegistrarActivity extends AppCompatActivity implements View.OnClickListener{
 
-public class RegistrarActivity extends AppCompatActivity {
+    //declarar objetos
+    private EditText TextEmail;
+    private EditText TextPassword;
+    private Button btnRegistrar;
+    private ProgressDialog progressDialog;
+    //declarar un objeto firebase
+    private FirebaseAuth firebaseAuth;
 
-    private static final String TAG = "RegistrarActivity";
-    private static final String REQUIRED = "Requerido";
-    private ProgressDialog mProgressDialog;
-
-    // declaracion de database
-    private FirebaseAuth mAuth;
-
-    //declaracion de los campos
-    private EditText nombre;
-    private EditText direccion;
-    private EditText telefono;
-    private Button btnRegistro;
-    private EditText dui;
-
-    private String FIREBASE_URL = "https://ferreteriafinal-b87ce.firebaseio.com/";
-    private String FIREBASE_CHILD = "test";
-    Firebase firebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar);
 
-        dui = (EditText) findViewById(R.id.dui);
-        nombre = (EditText) findViewById(R.id.nombre);
-        direccion = (EditText) findViewById(R.id.direccion);
-        telefono = (EditText) findViewById(R.id.telefono);
-        btnRegistro = (Button) findViewById(R.id.btnGuardar);
+        //inicializamos el objeto firebase
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        //click listener
+        //referenciamos los views
+        TextEmail = (EditText) findViewById(R.id.txtEmail);
+        TextPassword = (EditText) findViewById(R.id.txtPassword);
 
-        Firebase.setAndroidContext(this);
+        btnRegistrar = (Button) findViewById(R.id.botonRegistrar);
 
+        progressDialog = new ProgressDialog(this);
 
+        //botton de escucha
+        btnRegistrar.setOnClickListener(this);
     }
 
-    public void guardar(View view){
+    private void registrarUsuario(){
+        //obtenemos el email y las contraseñas desde las cajas de texto
+        String email = TextEmail.getText().toString().trim();
+        String password = TextPassword.getText().toString().trim();
 
-        firebase = new Firebase(FIREBASE_URL).child(dui.getText().toString());
-            firebase.setValue(nombre.getText().toString());
-            nombre.setText("");
-            dui.setText("");
+        if (TextUtils.isEmpty(email)){
+            Toast.makeText(this, "Se Debe Ingresa un Email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(password)){
+            Toast.makeText(this, "Se Debe Ingresa un Password", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        progressDialog.setMessage("Realizando registro en Linea.....");
+        progressDialog.show();
+
+        firebaseAuth.createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(task.isSuccessful()){
+                            Toast.makeText(RegistrarActivity.this, "Se ha Registrado el Usuario", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(RegistrarActivity.this, "No se Pudo Registrar el Usuario", Toast.LENGTH_SHORT).show();
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
+
+    }
+    @Override
+    public void onClick(View view) {
+
+        registrarUsuario();
+    }
 }
