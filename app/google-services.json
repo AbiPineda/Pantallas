@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "1031884434024-s5i8ucvi95gp4h51vpcf4ep86ie6b4f3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.abigail.pantallas",
+            "certificate_hash": "f76be094076a3e2835a07f26c7897b6b76821df7"
+          }
+        },
+        {
           "client_id": "1031884434024-hbol4s1mh7a4pame8oo0ldafktv8ei87.apps.googleusercontent.com",
           "client_type": 3
         }
