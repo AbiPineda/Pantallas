@@ -19,8 +19,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedReader;
 
@@ -31,7 +29,6 @@ public class RegistrarActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
 
     // declaracion de database
-    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
 
     //declaracion de los campos
@@ -61,19 +58,14 @@ public class RegistrarActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
 
-
     }
 
     public void guardar(View view){
 
-        firebase = new Firebase(FIREBASE_URL).child(getUid());
+        firebase = new Firebase(FIREBASE_URL).child(dui.getText().toString());
             firebase.setValue(nombre.getText().toString());
             nombre.setText("");
             dui.setText("");
         }
 
-    public String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-    }
 }
