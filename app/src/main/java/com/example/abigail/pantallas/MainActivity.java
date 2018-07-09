@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    public static final String usuario="nombre";
     private Button btnEntrar;
     private EditText etusuario, etcontraseña;
     private TextView txolvido, txregistrarme;
@@ -32,31 +33,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        etusuario = (EditText) findViewById(R.id.usuario);
-        etcontraseña = (EditText) findViewById(R.id.contraseña);
-        txregistrarme = (TextView) findViewById(R.id.registro);
-        btnEntrar = (Button)findViewById(R.id.botonlogin);
-
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             showProgressDialog();
             Intent intent = new Intent(MainActivity.this, Categorias.class);
             startActivity(intent);
+        }else {
+            firebaseAuth = FirebaseAuth.getInstance();
+            etusuario = (EditText) findViewById(R.id.usuario);
+            etcontraseña = (EditText) findViewById(R.id.contraseña);
+            txregistrarme = (TextView) findViewById(R.id.registro);
+            btnEntrar = (Button) findViewById(R.id.botonlogin);
+
+            txregistrarme.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, RegistrarActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+
+            btnEntrar.setOnClickListener(this);
         }
-
-        txregistrarme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v) {
-                Intent intent = new Intent(MainActivity.this, RegistrarActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnEntrar.setOnClickListener(this);
-
 
     }
     private void entrar()
