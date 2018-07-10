@@ -298,11 +298,13 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode==RESULT_OK){
 
+
             switch (requestCode){
                 case COD_SELECCIONA:
 
                     Uri miPath=data.getData();
-                    StorageReference fileput = mStorage.child("imagenes").child(miPath.getLastPathSegment());
+                    StorageReference fileput = mStorage.child("productos").child(miPath.getLastPathSegment());
+
 
                     imagen.setImageURI(miPath);
                     fileput.putFile(miPath).addOnFailureListener(new OnFailureListener() {
@@ -333,7 +335,27 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
                                 }
                             });
 
-                    
+                    Bitmap bitmap= BitmapFactory.decodeFile(path);
+                    imagen.setImageBitmap(bitmap);
+                    StorageReference mountainsRef = mStorage.child("productos").child("mountains.jpg");
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data1 = baos.toByteArray();
+                    UploadTask uploadTask = mountainsRef.putBytes(data1);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            Toast.makeText(ProductosActivity.this, "Error de subida"+exception, Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                            // ...
+                            Toast.makeText(ProductosActivity.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
                     break;
