@@ -38,9 +38,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            showProgressDialog();
-            Intent intent = new Intent(MainActivity.this, Categorias.class);
-            startActivity(intent);
+            Toast.makeText(this, "jeje"+ user.getEmail(), Toast.LENGTH_SHORT).show();
+            if (user.getEmail().equals("admin1@gmail.com")){
+                showProgressDialog();
+                Intent intent = new Intent(MainActivity.this, ProductosActivity.class);
+                startActivity(intent);
+            }else{
+                showProgressDialog();
+                Intent intent = new Intent(MainActivity.this, Categorias.class);
+                startActivity(intent);
+            }
+
         }else {
             firebaseAuth = FirebaseAuth.getInstance();
             etusuario = (EditText) findViewById(R.id.usuario);
@@ -88,17 +96,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                         if(task.isSuccessful()){
-                            finish();
-                            Toast.makeText(MainActivity.this, "Bienvenido: "+etusuario.getText(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplication(), Categorias.class);
-                            intent.putExtra(Categorias.usuario, email);
-                            startActivity(intent);
+                            if (email.equals("admin1@gmail.com")){
+                                finish();
+                                Toast.makeText(MainActivity.this, "Bienvenido: " + etusuario.getText(), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplication(), ProductosActivity.class);
+                                startActivity(intent);
+                            }else {
+                                finish();
+                                Toast.makeText(MainActivity.this, "Bienvenido: " + etusuario.getText(), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplication(), Categorias.class);
+                                intent.putExtra(Categorias.usuario, email);
+                                startActivity(intent);
+                            }
 
                         }else if (task.getException() instanceof FirebaseAuthInvalidUserException){
                             etusuario.setError("El Correo no Existe en Nuestros Registros.");
                         }else if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                            etusuario.setError("Correo Invalido");
-                            etcontraseña.setError("Contraseña Invalida");
+                            etusuario.setError("Correo o Contraseña Invalido");
                         }else {
 
                                 Toast.makeText(MainActivity.this, "Error"+task.getException(), Toast.LENGTH_SHORT).show();
@@ -117,8 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
             progressDialog.setMessage("Verificando en Linea...");
+            progressDialog.setCancelable(false);
+
         }
 
         progressDialog.show();

@@ -85,8 +85,7 @@ public class RegistrarActivity extends AppCompatActivity implements View.OnClick
                         }else if (task.getException() instanceof FirebaseAuthUserCollisionException){
                             Toast.makeText(RegistrarActivity.this, "Ese Usuario ya esta en Uso", Toast.LENGTH_SHORT).show();
                         }else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
-                            TextEmail.setError("Correo Invalido");
-                            TextPassword.setError("Contraseña Invalida");
+                            TextEmail.setError("Correo o Contraseña Invalidos");
                         }else if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
                             TextPassword.setError("Contraseña Debe Contener Por lo Menos 6 Caracteres");
                         }else{
@@ -116,8 +115,9 @@ public class RegistrarActivity extends AppCompatActivity implements View.OnClick
     public void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
             progressDialog.setMessage("Verificando en Linea...");
+            progressDialog.setCancelable(false);
+
         }
 
         progressDialog.show();

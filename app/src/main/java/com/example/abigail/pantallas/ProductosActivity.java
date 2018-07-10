@@ -1,5 +1,6 @@
 package com.example.abigail.pantallas;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,10 +19,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 
@@ -30,8 +35,10 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class ProductosActivity extends AppCompatActivity {
 
-    private final String CARPETA_RAIZ="misImagenesPrueba/";
-    private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
+    private final String CARPETA_RAIZ="misImagenesFerreteria/";
+    private final String RUTA_IMAGEN=CARPETA_RAIZ+"misProductos";
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
 
     final int COD_SELECCIONA=10;
     final int COD_FOTO=20;
@@ -45,8 +52,10 @@ public class ProductosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
 
+
         imagen= (ImageView) findViewById(R.id.imagemId);
         botonCargar= (Button) findViewById(R.id.btnCargarImg);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         if(validaPermisos()){
             botonCargar.setEnabled(true);
@@ -54,6 +63,47 @@ public class ProductosActivity extends AppCompatActivity {
             botonCargar.setEnabled(false);
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_admin, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (item.getItemId()) {
+            case R.id.salir:
+                salir();
+                return true;
+            case R.id.pedidos:
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    private void salir() {
+        showProgressDialog();
+        firebaseAuth.getInstance().signOut();
+        finish();
+        Intent intent = new Intent(ProductosActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Verificando en Linea...");
+        }
+
+        progressDialog.show();
     }
 
     private boolean validaPermisos() {
