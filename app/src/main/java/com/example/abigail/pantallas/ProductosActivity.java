@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -41,8 +42,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +59,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
     DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     private final String REQUERID="Requerido";
     private StorageReference mStorage;
+    private FirebaseStorage storage;
     private final String CARPETA_RAIZ="misImagenesFerreteria/";
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"misProductos";
     private FirebaseAuth firebaseAuth;
@@ -88,9 +92,10 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
         tProducto = (Spinner) findViewById(R.id.spinner);
         String[] letra = {"Construccion","Herramientas","Hogar","Pintura","Maquinaria","Varios"};
         tProducto.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, letra));
-        //Referenciando imagen de base
-        mStorage = FirebaseStorage.getInstance().getReference();
 
+        //Referencia imagenes
+
+        mStorage = FirebaseStorage.getInstance().getReference();
 
 
 
@@ -297,23 +302,39 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
                 case COD_SELECCIONA:
 
                     Uri miPath=data.getData();
+                    StorageReference fileput = mStorage.child("imagenes").child(miPath.getLastPathSegment());
 
                     imagen.setImageURI(miPath);
-                    subirfoto2(miPath);
-                    Toast.makeText(this, "entra: "+miPath.getLastPathSegment(), Toast.LENGTH_SHORT).show();
+                    fileput.putFile(miPath).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            Toast.makeText(ProductosActivity.this, "Error de subida"+exception, Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                            // ...
+                            Toast.makeText(ProductosActivity.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                     break;
 
                 case COD_FOTO:
+
                     MediaScannerConnection.scanFile(this, new String[]{path}, null,
                             new MediaScannerConnection.OnScanCompletedListener() {
                                 @Override
                                 public void onScanCompleted(String path, Uri uri) {
                                     Log.i("Ruta de almacenamiento","Path: "+path);
+
                                 }
                             });
 
-                    Bitmap bitmap= BitmapFactory.decodeFile(path);
-                    imagen.setImageBitmap(bitmap);
+                    
+
 
                     break;
             }
@@ -322,23 +343,19 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
         }
     }
     public void subirfoto2(Uri miPath){
-        Toast.makeText(this, "entra: "+miPath, Toast.LENGTH_SHORT).show();
-        StorageReference sr = mStorage.child("FotosProductos").child(miPath.getLastPathSegment());
 
-        sr.putFile(miPath).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                Toast.makeText(ProductosActivity.this, "Error de subida", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                Toast.makeText(ProductosActivity.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+        imagen.setDrawingCacheEnabled(true);
+        imagen.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) imagen.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        Toast.makeText(this, "entra: "+data.toString(), Toast.LENGTH_SHORT).show();
+        UploadTask uploadTask = mStorage.putBytes(data);
+
+
     }
 
     @Override
