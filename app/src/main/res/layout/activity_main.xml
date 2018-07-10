@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_email1"
+            android:inputType="textEmailAddress"
             android:padding="16dp" />
 
         <EditText

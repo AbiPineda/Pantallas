@@ -76,8 +76,9 @@ public class Categorias extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void salir() {
-        firebaseAuth.signOut();
         showProgressDialog();
+        firebaseAuth.getInstance().signOut();
+        finish();
         Intent intent = new Intent(Categorias.this, MainActivity.class);
         startActivity(intent);
     }

@@ -15,7 +15,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 public class RegistrarActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -24,7 +26,7 @@ public class RegistrarActivity extends AppCompatActivity implements View.OnClick
     //declarar objetos
     private EditText TextEmail;
     private EditText TextPassword;
-    private Button btnRegistrar;
+    private Button btnRegistrar,btnRegresar;
     private ProgressDialog progressDialog;
     //declarar un objeto firebase
     private FirebaseAuth firebaseAuth;
@@ -43,11 +45,13 @@ public class RegistrarActivity extends AppCompatActivity implements View.OnClick
         TextPassword = (EditText) findViewById(R.id.txtPassword);
 
         btnRegistrar = (Button) findViewById(R.id.botonRegistrar);
+        btnRegresar = (Button) findViewById(R.id.botonRegresar);
 
         progressDialog = new ProgressDialog(this);
 
         //botton de escucha
         btnRegistrar.setOnClickListener(this);
+        btnRegresar.setOnClickListener(this);
     }
 
     private void registrarUsuario(){
@@ -60,7 +64,7 @@ public class RegistrarActivity extends AppCompatActivity implements View.OnClick
             return;
         }
         if (TextUtils.isEmpty(password)){
-            TextEmail.setError(REQUIRED);
+            TextPassword.setError(REQUIRED);
             return;
         }
 
@@ -74,13 +78,19 @@ public class RegistrarActivity extends AppCompatActivity implements View.OnClick
 
                         if(task.isSuccessful()){
                             Toast.makeText(RegistrarActivity.this, "Se ha Registrado el Usuario con el Email: "+TextEmail.getText(), Toast.LENGTH_SHORT).show();
+                            finish();
                             Intent intent = new Intent(getApplication(), Categorias.class);
                             intent.putExtra(MainActivity.usuario, email);
                             startActivity(intent);
                         }else if (task.getException() instanceof FirebaseAuthUserCollisionException){
                             Toast.makeText(RegistrarActivity.this, "Ese Usuario ya esta en Uso", Toast.LENGTH_SHORT).show();
+                        }else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
+                            TextEmail.setError("Correo Invalido");
+                            TextPassword.setError("Contraseña Invalida");
+                        }else if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
+                            TextPassword.setError("Contraseña Debe Contener Por lo Menos 6 Caracteres");
                         }else{
-                            Toast.makeText(RegistrarActivity.this, "No se Pudo Registrar el Usuario", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrarActivity.this, "Error: "+task.getException(), Toast.LENGTH_SHORT).show();
                         }
                         hideProgressDialog();
                     }
@@ -91,7 +101,16 @@ public class RegistrarActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
 
-        registrarUsuario();
+        int i = view.getId();
+
+        if (i == R.id.botonRegistrar) {
+            registrarUsuario();
+        }
+        if (i == R.id.botonRegresar){
+            finish();
+            Intent intent = new Intent(RegistrarActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void showProgressDialog() {
