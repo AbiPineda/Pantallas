@@ -16,6 +16,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             txregistrarme.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    finish();
                     Intent intent = new Intent(MainActivity.this, RegistrarActivity.class);
                     startActivity(intent);
                 }
@@ -84,16 +88,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                         if(task.isSuccessful()){
+                            finish();
                             Toast.makeText(MainActivity.this, "Bienvenido: "+etusuario.getText(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplication(), Categorias.class);
                             intent.putExtra(Categorias.usuario, email);
                             startActivity(intent);
 
-                        }else if (task.getException() instanceof FirebaseAuthUserCollisionException){
-                            Toast.makeText(MainActivity.this, "Ese Usuario ya esta en Uso", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(MainActivity.this, "No se Pudo Registrar el Usuario", Toast.LENGTH_SHORT).show();
-                        }
+                        }else if (task.getException() instanceof FirebaseAuthInvalidUserException){
+                            etusuario.setError("El Correo no Existe en Nuestros Registros.");
+                        }else if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            etusuario.setError("Correo Invalido");
+                            etcontraseña.setError("Contraseña Invalida");
+                        }else {
+
+                                Toast.makeText(MainActivity.this, "Error"+task.getException(), Toast.LENGTH_SHORT).show();
+                            }
+
                         hideProgressDialog();
                     }
                 });
