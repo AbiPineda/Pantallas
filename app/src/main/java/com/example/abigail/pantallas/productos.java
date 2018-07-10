@@ -42,5 +42,13 @@ public class productos {
         return result;
     }
 
+    public String getnProducto() {
+        return nProducto;
+    }
+
+    public void setnProducto(String nProducto) {
+        this.nProducto = nProducto;
+    }
+
 
 }
