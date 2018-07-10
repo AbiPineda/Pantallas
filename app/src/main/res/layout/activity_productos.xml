@@ -11,14 +11,12 @@
     tools:context=".ProductosActivity">
 
     <Button
-        android:id="@+id/btnCargarImg2"
+        android:id="@+id/botonguardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp"
         android:background="#69bbf5"
-        android:onClick="onclick"
         android:text="GUARDAR"
         android:textColor="#ffff" />
 
@@ -36,9 +34,8 @@
         android:id="@+id/btnCargarImg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/imagemId"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="213dp"
         android:background="@color/colorPrimary"
         android:onClick="onclick"
         android:text="Selecciona Imagen"
@@ -47,7 +44,7 @@
     <ImageView
         android:id="@+id/imagemId"
         android:layout_width="198dp"
-        android:layout_height="150dp"
+        android:layout_height="105dp"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:src="@drawable/img_base" />
@@ -56,30 +53,46 @@
         android:id="@+id/nombreProducto"
         android:layout_width="352dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/marcaProducto"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:ems="10"
         android:hint="Nombre:"
         android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/marcaProducto"
-        android:layout_width="wrap_content"
+        android:layout_width="288dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/btnCargarImg"
-        android:layout_marginBottom="105dp"
+        android:layout_below="@+id/nombreProducto"
+        android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="Marca:"
         android:inputType="textPersonName" />
 
     <EditText
+        android:id="@+id/cantidadProducto"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/marcaProducto"
+        android:ems="10"
+        android:hint="Cantidad"
+        android:inputType="number" />
+
+    <EditText
         android:id="@+id/precioProducto"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/marcaProducto"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/marcaProducto"
+        android:layout_toStartOf="@+id/cantidadProducto"
         android:ems="10"
         android:hint="Precio:"
-        android:inputType="textPersonName" />
+        android:inputType="numberDecimal" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="72dp" />
 </RelativeLayout>

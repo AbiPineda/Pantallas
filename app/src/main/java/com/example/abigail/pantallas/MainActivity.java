@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            Toast.makeText(this, "jeje"+ user.getEmail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Bienvenido: "+ user.getEmail(), Toast.LENGTH_SHORT).show();
             if (user.getEmail().equals("admin1@gmail.com")){
                 showProgressDialog();
                 Intent intent = new Intent(MainActivity.this, ProductosActivity.class);
