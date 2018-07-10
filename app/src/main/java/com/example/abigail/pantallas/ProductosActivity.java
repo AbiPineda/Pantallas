@@ -32,6 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +42,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,6 +90,8 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
         tProducto.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, letra));
         //Referenciando imagen de base
         mStorage = FirebaseStorage.getInstance().getReference();
+
+
 
 
 
@@ -295,6 +300,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
 
                     imagen.setImageURI(miPath);
                     subirfoto2(miPath);
+                    Toast.makeText(this, "entra: "+miPath.getLastPathSegment(), Toast.LENGTH_SHORT).show();
                     break;
 
                 case COD_FOTO:
@@ -317,13 +323,22 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
     }
     public void subirfoto2(Uri miPath){
         Toast.makeText(this, "entra: "+miPath, Toast.LENGTH_SHORT).show();
-        //StorageReference sr = mStorage.child("Fotos-Productos").child(miPath.getLastPathSegment());
-        //sr.putFile(miPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-          //  @Override
-            //public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-              //  Toast.makeText(ProductosActivity.this, "Subido Correctamente", Toast.LENGTH_SHORT).show();
-            //}
-        //});
+        StorageReference sr = mStorage.child("FotosProductos").child(miPath.getLastPathSegment());
+
+        sr.putFile(miPath).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(ProductosActivity.this, "Error de subida", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                Toast.makeText(ProductosActivity.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
