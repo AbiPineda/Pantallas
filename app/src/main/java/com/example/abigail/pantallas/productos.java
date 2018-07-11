@@ -12,10 +12,10 @@ public class productos {
     private String pProducto;
     private String cProducto;
     private String tProducto;
-    private String pId;
+    private String uid;
 
-    public productos(String pId, String nProducto, String mProducto, String tProducto, String pProducto, String cProducto){
-        this.pId = pId;
+    public productos(String uid, String nProducto, String mProducto, String tProducto, String pProducto, String cProducto){
+        this.uid = uid;
         this.nProducto =  nProducto;
         this.mProducto = mProducto;
         this.tProducto = tProducto;
@@ -32,7 +32,7 @@ public class productos {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("pId", pId);
+        result.put("uid", uid);
         result.put("nombre", nProducto);
         result.put("marca", mProducto);
         result.put("tipo", tProducto);

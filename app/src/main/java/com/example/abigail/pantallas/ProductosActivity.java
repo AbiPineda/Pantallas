@@ -302,12 +302,12 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
             switch (requestCode){
                 case COD_SELECCIONA:
 
-                    Uri miPath=data.getData();
+                    final Uri miPath=data.getData();
                     StorageReference fileput = mStorage.child("productos").child(miPath.getLastPathSegment());
 
 
                     imagen.setImageURI(miPath);
-                    fileput.putFile(miPath).addOnFailureListener(new OnFailureListener() {
+                   /* fileput.putFile(miPath).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             // Handle unsuccessful uploads
@@ -320,7 +320,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
                             // ...
                             Toast.makeText(ProductosActivity.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    });*/
 
                     break;
 
@@ -337,7 +337,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
 
                     Bitmap bitmap= BitmapFactory.decodeFile(path);
                     imagen.setImageBitmap(bitmap);
-                    StorageReference mountainsRef = mStorage.child("productos").child("mountains.jpg");
+                    /*StorageReference mountainsRef = mStorage.child("productos").child("mountains.jpg");
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] data1 = baos.toByteArray();
@@ -355,7 +355,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
                             // ...
                             Toast.makeText(ProductosActivity.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    });*/
 
 
                     break;
@@ -364,21 +364,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
 
         }
     }
-    public void subirfoto2(Uri miPath){
-
-
-        imagen.setDrawingCacheEnabled(true);
-        imagen.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) imagen.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        Toast.makeText(this, "entra: "+data.toString(), Toast.LENGTH_SHORT).show();
-        UploadTask uploadTask = mStorage.putBytes(data);
-
-
-    }
+ 
 
     @Override
     public void onClick(View view) {
@@ -411,22 +397,51 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
 
     private void guardarProducto(){
 
+
         String pId = getUid();
-        Toast.makeText(this, "raro"+imagen.getDrawable(), Toast.LENGTH_SHORT).show();
+        String Pro_Key = mDatabaseReference.child("producto").push().getKey();
+
         String text = tProducto.getSelectedItem().toString();
-        String idKey = text + mProducto.getText().toString() + nProducto.getText().toString();
+
         String key = mDatabaseReference.child("producto").push().getKey();
         productos prod = new productos(pId,nProducto.getText().toString(),mProducto.getText().toString(),text,pProducto.getText().toString(),cProducto.getText().toString());
         Map<String, Object> productosValues = prod.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/producto/" + idKey, productosValues);
+        childUpdates.put("/producto/" + Pro_Key, productosValues);
 
         mDatabaseReference.updateChildren(childUpdates);
         //Agrega a un usuario especifico
         //childUpdates.put("/user-posts/" + pId + "/" + key, postValues);
 
         Toast.makeText(this, "Producto "+nProducto.getText().toString()+" Se Guardo Exitosamente", Toast.LENGTH_SHORT).show();
+
+        imagen.setDrawingCacheEnabled(true);
+        imagen.buildDrawingCache();
+        Bitmap bitmap= ((BitmapDrawable) imagen.getDrawable()).getBitmap();
+        StorageReference mountainsRef = mStorage.child("productos/".concat(Pro_Key));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(ProductosActivity.this, "Error de subida"+exception, Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                Toast.makeText(ProductosActivity.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+            }
+        });
+        nProducto.setText("");
+        mProducto.setText("");
+        cProducto.setText("");
+        pProducto.setText("");
 
     }
 
