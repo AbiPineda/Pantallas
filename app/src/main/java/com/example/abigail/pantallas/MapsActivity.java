@@ -19,6 +19,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.style.BulletSpan;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,7 +56,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener,View.OnClickListener {
 
     private GoogleMap mMap;
     //instancias de localizacion con gps
@@ -62,9 +64,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng currentLocationLatLng;
     //llamado instancia para base de datos
     private DatabaseReference mDatabase;
-    //dos puntos
+    //dos puntos y su trazado
     ArrayList<LatLng> listPoints;
     private static final int LOCATION_REQUEST = 500;
+    //Botones de cambio de tipo de mapa
+    private Button bMapa,bHibrido,bTerreno,bInterior,bLimpiar,bBorrar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +84,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startGettingLocations();
         //Referecia a la base de datos
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        //llamado a los markets de ubicacion antiguos
+        //llamado a los markets de ubicacion antiguos para guardar usa la clase LocationData.java
         getMarkers();
-            //MARCAR 2 UBICACIONES
+            //MARCAR 2 UBICACIONES usa una clase llamada MapsParse.java
         mapFragment.getMapAsync(this);
         listPoints = new ArrayList<>();
+        //Botones cambio de mapas
+
+        bMapa =(Button)findViewById(R.id.bMapa);
+        bHibrido =(Button)findViewById(R.id.bHibrido);
+        bTerreno =(Button)findViewById(R.id.bTerreno);
+        bInterior =(Button)findViewById(R.id.bInterior);
+        bLimpiar=(Button)findViewById(R.id.bLimpiar);
+        bBorrar=(Button)findViewById(R.id.bBorrar);
+
+        bMapa.setOnClickListener(this);
+        bHibrido.setOnClickListener(this);
+        bTerreno.setOnClickListener(this);
+        bInterior.setOnClickListener(this);
+        bLimpiar.setOnClickListener(this);
+        bBorrar.setOnClickListener(this);
+
 
     }
 
@@ -111,6 +132,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         getTwoMarkers();
     }
+
+    //Botones que escuchan cambio de mapas
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.bMapa:
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case R.id.bHibrido:
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            case R.id.bTerreno:
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+            case R.id.bInterior:
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case R.id.bLimpiar:
+                mMap.clear();
+                getMarkers();
+                break;
+            case R.id.bBorrar:
+                mDatabase.child("Location").removeValue();
+                mMap.clear();
+                listPoints.clear();
+                break;
+                default:
+                    break;
+
+        }
+    }
+
     //PARA MARCAR 2 MARKETS O UBICACIONES Y TRASARLOS
     public void getTwoMarkers() {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -214,6 +267,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+
+
     public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
         @Override
@@ -306,7 +361,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         CameraPosition cameraPosition= new CameraPosition.Builder().zoom(15).target(currentLocationLatLng).build();*/
         LatLng latlng = new LatLng( location.getLatitude(), location.getLongitude());
-        CameraPosition cameraPosition= new CameraPosition.Builder().zoom(15).target(latlng).build();
+        CameraPosition cameraPosition= new CameraPosition.Builder().zoom(20).target(latlng).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mMap.setMyLocationEnabled(true);
 
@@ -374,7 +429,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         boolean isNetwork = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         boolean canGetLocation = true;
         int ALL_PERMISSIONS_RESULT = 101;
-        long MIN_DISTANCE_CHANGE_FOR_UPDATE = 100; //distancia en metros
+        long MIN_DISTANCE_CHANGE_FOR_UPDATE = 10; //distancia en metros
         long MIN_TIME_BW_UPDATES= 1000*100; // tiempo en milisegundos
 
         ArrayList<String> permissions = new ArrayList<>();
@@ -453,7 +508,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MarkerOptions markerOptions= new MarkerOptions();
         markerOptions.position(latlng);
         markerOptions.title(dt.format(newDate));
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.camino1));
         mMap.addMarker(markerOptions);
     }
 
