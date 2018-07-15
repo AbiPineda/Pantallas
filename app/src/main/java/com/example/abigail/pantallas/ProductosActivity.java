@@ -92,7 +92,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
         tProducto = (Spinner) findViewById(R.id.spinner);
         String[] letra = {"Construccion","Herramientas","Hogar","Pintura","Maquinaria","Varios"};
         tProducto.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, letra));
-
+        final String TAG = "ProductosActivity";
         //Referencia imagenes
 
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -404,7 +404,7 @@ public class ProductosActivity extends AppCompatActivity implements View.OnClick
         String text = tProducto.getSelectedItem().toString();
 
         String key = mDatabaseReference.child("producto").push().getKey();
-        productos prod = new productos(pId,nProducto.getText().toString(),mProducto.getText().toString(),text,pProducto.getText().toString(),cProducto.getText().toString());
+        productos prod = new productos(Pro_Key,nProducto.getText().toString(),mProducto.getText().toString(),text,pProducto.getText().toString(),cProducto.getText().toString());
         Map<String, Object> productosValues = prod.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();

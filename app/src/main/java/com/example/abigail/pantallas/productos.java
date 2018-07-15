@@ -15,12 +15,12 @@ public class productos {
     private String uid;
 
     public productos(String uid, String nProducto, String mProducto, String tProducto, String pProducto, String cProducto){
-        this.uid = uid;
-        this.nProducto =  nProducto;
-        this.mProducto = mProducto;
-        this.tProducto = tProducto;
-        this.pProducto = pProducto;
-        this.cProducto = cProducto;
+        this.setUid(uid);
+        this.setnProducto(nProducto);
+        this.setmProducto(mProducto);
+        this.settProducto(tProducto);
+        this.setpProducto(pProducto);
+        this.setcProducto(cProducto);
 
     }
 
@@ -32,12 +32,12 @@ public class productos {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("uid", uid);
-        result.put("nombre", nProducto);
-        result.put("marca", mProducto);
-        result.put("tipo", tProducto);
-        result.put("precio", pProducto);
-        result.put("cantidad", cProducto);
+        result.put("uid", getUid());
+        result.put("nProducto", getnProducto());
+        result.put("mProducto", getmProducto());
+        result.put("tProducto", gettProducto());
+        result.put("pProducto", getpProducto());
+        result.put("cProducto", getcProducto());
 
         return result;
     }
@@ -51,4 +51,53 @@ public class productos {
     }
 
 
+    public String getmProducto() {
+        return mProducto;
+    }
+
+    public void setmProducto(String mProducto) {
+        this.mProducto = mProducto;
+    }
+
+    public String getpProducto() {
+        return pProducto;
+    }
+
+    public void setpProducto(String pProducto) {
+        this.pProducto = pProducto;
+    }
+
+    public String getcProducto() {
+        return cProducto;
+    }
+
+    public void setcProducto(String cProducto) {
+        this.cProducto = cProducto;
+    }
+
+    public String gettProducto() {
+        return tProducto;
+    }
+
+    public void settProducto(String tProducto) {
+        this.tProducto = tProducto;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    @Override
+    public String toString() {
+        return   "Nombre Producto: '" + nProducto + '\'' +
+                "\n, Marca: '" + mProducto + '\'' +
+                "\n, Tipo de Producto: '" + tProducto + '\'' +
+                "\n, Cantidad Disponible: '" + cProducto + '\'' +
+                "\n, Precio por unidad: '" + pProducto+ '\'' +
+                "\n, identificador: '" + uid;
+    }
 }
